@@ -1,0 +1,2 @@
+inherited dtmCliente: TdtmCliente
+end

@@ -1,0 +1,21 @@
+program wkPedidos;
+
+uses
+  Vcl.Forms,
+  UfrmPrincipal in 'UfrmPrincipal.pas' {frmPrincipal},
+  UdtmConexao in 'DAO\UdtmConexao.pas' {dtmConexao: TDataModule},
+  UdtmBaseDAO in 'DAO\UdtmBaseDAO.pas' {dtmBaseDAO: TDataModule},
+  UdtmProduto in 'DAO\UdtmProduto.pas' {dtmProduto: TDataModule},
+  UControleBase in 'Controller\UControleBase.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+  Application.CreateForm(TdtmConexao, dtmConexao);
+  Application.CreateForm(TdtmBaseDAO, dtmBaseDAO);
+  Application.CreateForm(TdtmProduto, dtmProduto);
+  Application.Run;
+end.

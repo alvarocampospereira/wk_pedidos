@@ -1,0 +1,489 @@
+unit UfrmPedido;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.StdCtrls, Vcl.Buttons,
+  Vcl.ExtCtrls, Vcl.Grids, Vcl.DBGrids, Datasnap.DBClient,
+  System.Generics.Collections;
+
+type
+  TfrmPedido = class(TForm)
+    dbgrdProdutos: TDBGrid;
+    pnlCliente: TPanel;
+    pnlProduto: TPanel;
+    btnCarregarPedido: TBitBtn;
+    btnCancelarPedido: TBitBtn;
+    btnInserirProduto: TBitBtn;
+    pnlTotal: TPanel;
+    btnGravarPedido: TBitBtn;
+    edtNumeroPedido: TEdit;
+    cdsPedidoProduto: TClientDataSet;
+    dtsPedidoProduto: TDataSource;
+    cdsPedidoProdutoid_Produto: TIntegerField;
+    cdsPedidoProdutoDescricao: TStringField;
+    cdsPedidoProdutoQuantidade: TFloatField;
+    cdsPedidoProdutoValorUnitario: TFloatField;
+    cdsPedidoProdutoValorTotal: TFloatField;
+    cdsPedidoProdutoExcluido: TBooleanField;
+    cdsPedidoProdutoid_PedidoProduto: TIntegerField;
+    cdsPedidoProdutoSeq: TAutoIncField;
+    btnLimpar: TBitBtn;
+    edtCodigoProduto: TEdit;
+    edtDescricaoProduto: TEdit;
+    edtQuantidade: TEdit;
+    edtValorUnitario: TEdit;
+    edtValorTotal: TEdit;
+    lblCodigoProduto: TLabel;
+    lblDescricao: TLabel;
+    lblQuantidade: TLabel;
+    lblValorUnitario: TLabel;
+    lblValorTotal: TLabel;
+    edtCodigoCliente: TEdit;
+    edtNomeCliente: TEdit;
+    lblCodigoCliente: TLabel;
+    lblTotalPedido: TLabel;
+    edtTotalPedido: TEdit;
+    lblNumeroPedido: TLabel;
+    lblData: TLabel;
+    edtDataEmissao: TEdit;
+    edtPedidoProduto: TEdit;
+    procedure btnLimparClick(Sender: TObject);
+    procedure edtCodigoProdutoExit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure edtQuantidadeKeyPress(Sender: TObject; var Key: Char);
+    procedure edtValorUnitarioKeyPress(Sender: TObject; var Key: Char);
+    procedure edtQuantidadeExit(Sender: TObject);
+    procedure edtValorUnitarioExit(Sender: TObject);
+    procedure btnInserirProdutoClick(Sender: TObject);
+    procedure cdsPedidoProdutoAfterInsert(DataSet: TDataSet);
+    procedure dbgrdProdutosKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure edtCodigoClienteExit(Sender: TObject);
+    procedure btnGravarPedidoClick(Sender: TObject);
+    procedure edtCodigoClienteKeyPress(Sender: TObject; var Key: Char);
+    procedure edtCodigoProdutoKeyPress(Sender: TObject; var Key: Char);
+    procedure btnCarregarPedidoClick(Sender: TObject);
+    procedure btnCancelarPedidoClick(Sender: TObject);
+  private
+    { Private declarations }
+    procedure CalcularTotalProduto;
+    procedure LimparTudo;
+    procedure LimparProduto;
+    procedure ApagarPedidoProduto;
+    procedure TotalizarPedido;
+    procedure SalvarProduto(vid_Produto, vid_PedidoProduto: Integer; vDescricao: string; vQuantidade, vValorUnitario, vValorTotal: Double);
+    procedure CarregarPedido(id: Integer);
+    procedure CancelarPedido(id: Integer);
+    procedure GravarPedido;
+    procedure EditarProduto;
+    function BuscarNumeroPedido: Integer;
+    procedure HabilitarBotoes(vHabilitar: Boolean);
+  public
+    { Public declarations }
+  end;
+
+var
+  frmPedido: TfrmPedido;
+
+implementation
+
+uses UControleProduto, UProduto, UControleCliente, UCliente, UControlePedido,
+     UPedido, UControlePedidoProduto, UPedidoProduto, UdtmConexao,
+     UfrmInformarPedido;
+
+{$R *.dfm}
+
+procedure TfrmPedido.ApagarPedidoProduto;
+var ctrPedidoProduto: TControlePedidoProduto;
+begin
+  if Application.MessageBox('Deseja excluir produto?', 'Confirmação', MB_YESNO
+    + MB_ICONQUESTION) = IDNO then
+    Exit;
+
+  if cdsPedidoProdutoid_PedidoProduto.AsInteger > 0 then
+  begin
+    ctrPedidoProduto := TControlePedidoProduto.Create;
+
+    try
+      dtmConexao.IniciarTransacao;
+      ctrPedidoProduto.ExcluirPedidoProduto(cdsPedidoProdutoid_PedidoProduto.AsInteger);
+      dtmConexao.GravarTransacao;
+
+      Application.MessageBox('Produto apagado com sucesso!', 'Informação',
+        MB_OK + MB_ICONINFORMATION);
+    except on E: Exception do
+    begin
+      dtmConexao.CancelarTransacao;
+      raise Exception.Create(e.Message);
+    end;
+    end;
+  end;
+  //else
+    cdsPedidoProduto.Delete;
+
+  TotalizarPedido;
+end;
+
+procedure TfrmPedido.btnCancelarPedidoClick(Sender: TObject);
+var NumeroPedido: Integer;
+begin
+  NumeroPedido := BuscarNumeroPedido;
+  if NumeroPedido = 0 then
+    Exit;
+
+  if Application.MessageBox('Deseja realmente excluir o pedido?', 'Excluir',
+    MB_YESNO + MB_ICONQUESTION) = IDYES then
+  begin
+    CancelarPedido(NumeroPedido);
+  end;
+end;
+
+procedure TfrmPedido.btnCarregarPedidoClick(Sender: TObject);
+var NumeroPedido: Integer;
+begin
+  NumeroPedido := BuscarNumeroPedido;
+  if NumeroPedido = 0 then
+    Exit;
+  CarregarPedido(NumeroPedido);
+  TotalizarPedido;
+end;
+
+procedure TfrmPedido.btnGravarPedidoClick(Sender: TObject);
+begin
+  try
+    dtmConexao.IniciarTransacao;
+    GravarPedido;
+    dtmConexao.GravarTransacao;
+    Application.MessageBox('Pedido gravado com sucesso!', 'Confirmação', MB_OK
+      + MB_ICONINFORMATION);
+    LimparTudo;
+  except on E: Exception do
+  begin
+    dtmConexao.CancelarTransacao;
+    raise Exception.Create(E.Message);
+  end;
+  end;
+
+end;
+
+procedure TfrmPedido.btnInserirProdutoClick(Sender: TObject);
+begin
+  SalvarProduto(StrToInt(edtCodigoProduto.Text), StrToIntDef(edtPedidoProduto.Text,0), edtDescricaoProduto.Text, StrToFloat(edtQuantidade.Text), StrToFloat(edtValorUnitario.Text), StrToFloat(edtValorTotal.Text));
+  TotalizarPedido;
+  LimparProduto;
+  edtCodigoProduto.SetFocus;
+end;
+
+procedure TfrmPedido.btnLimparClick(Sender: TObject);
+begin
+  LimparTudo;
+end;
+
+function TfrmPedido.BuscarNumeroPedido: Integer;
+begin
+  Result := 0;
+  frmInformarPedido := TfrmInformarPedido.Create(nil);
+  if frmInformarPedido.ShowModal = mrOk then
+    Result := frmInformarPedido.NumeroPedido;
+  FreeAndNil(frmInformarPedido);
+end;
+
+procedure TfrmPedido.CalcularTotalProduto;
+var
+  Qtde, Valor: Double;
+begin
+  Qtde := StrToFloat(edtQuantidade.Text);
+  Valor := StrToFloat(edtValorUnitario.Text);
+  edtValorTotal.Text := FormatFloat('#,##0.00', Qtde * Valor);
+end;
+
+procedure TfrmPedido.CancelarPedido(id: Integer);
+var ctrPedido: TControlePedido;
+    ctrPedidoProduto: TControlePedidoProduto;
+begin
+  try
+    ctrPedido := TControlePedido.Create;
+    ctrPedidoProduto := TControlePedidoProduto.Create;
+
+    dtmConexao.IniciarTransacao;
+    ctrPedidoProduto.ExcluirTodosProdutosPedido(id);
+    ctrPedido.ExcluirPedido(id);
+    dtmConexao.GravarTransacao;
+
+    Application.MessageBox('Pedido cancelado com sucesso!', 'Informação',
+      MB_OK + MB_ICONINFORMATION);
+  except on E: Exception do
+  begin
+    dtmConexao.CancelarTransacao;
+    raise Exception.Create(e.Message);
+  end;
+  end;
+end;
+
+procedure TfrmPedido.CarregarPedido(id: Integer);
+var ctrPedido: TControlePedido;
+    objPedido: TPedido;
+    ctrPedidoProduto: TControlePedidoProduto;
+    objPedidoProduto: TPedidoProduto;
+    lstPedidoProduto: TObjectList<TPedidoProduto>;
+begin
+  try
+    try
+      ctrPedido := TControlePedido.Create;
+      objPedido := TPedido.Create;
+      ctrPedidoProduto := TControlePedidoProduto.Create;
+      objPedidoProduto := TPedidoProduto.Create;
+      objPedido.id_Pedido := id;
+
+      objPedido := ctrPedido.ConsultarPedido(objPedido);
+      if objPedido.id_Pedido = 0 then
+        Exit;
+
+      edtDataEmissao.Text := DateToStr(objPedido.DataEmissao);
+      edtCodigoCliente.Text := IntToStr(objPedido.id_Cliente);
+      edtCodigoClienteExit(nil);
+      // carrega itens
+      objPedidoProduto.id_Pedido := objPedido.id_Pedido;
+      lstPedidoProduto := ctrPedidoProduto.ConsultarPedidoProduto(objPedidoProduto);
+      for objPedidoProduto in lstPedidoProduto do
+      begin
+        SalvarProduto(objPedidoProduto.Produto.id_Produto, objPedidoProduto.id_PedidoProduto, objPedidoProduto.Produto.Descricao, objPedidoProduto.Quantidade, objPedidoProduto.ValorUnitario, objPedidoProduto.ValorTotal);
+      end;
+    finally
+       FreeAndNil(ctrPedido);
+       FreeAndNil(objPedido);
+       FreeAndNil(ctrPedidoProduto);
+       FreeAndNil(objPedidoProduto);
+    end;
+  except on E: Exception do
+    raise Exception.Create(e.Message);
+  end;
+end;
+
+procedure TfrmPedido.cdsPedidoProdutoAfterInsert(DataSet: TDataSet);
+begin
+  cdsPedidoProdutoExcluido.AsBoolean := False;
+end;
+
+procedure TfrmPedido.dbgrdProdutosKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+    EditarProduto;
+  if Key = VK_DELETE then
+    ApagarPedidoProduto;
+end;
+
+procedure TfrmPedido.EditarProduto;
+begin
+  edtCodigoProduto.Text := cdsPedidoProdutoid_Produto.AsString;
+  edtDescricaoProduto.Text := cdsPedidoProdutoDescricao.AsString;
+  edtQuantidade.Text := FormatFloat('#,##0.00', cdsPedidoProdutoQuantidade.AsFloat);
+  edtValorUnitario.Text := FormatFloat('#,##0.00', cdsPedidoProdutoValorUnitario.AsFloat);
+  edtValorTotal.Text := FormatFloat('#,##0.00', cdsPedidoProdutoValorTotal.AsFloat);
+  edtPedidoProduto.Text := cdsPedidoProdutoid_PedidoProduto.AsString;
+  edtCodigoProduto.ReadOnly := True;
+end;
+
+procedure TfrmPedido.edtCodigoClienteExit(Sender: TObject);
+var ctrCliente: TControleCliente;
+    objCliente: TCliente;
+begin
+  if edtCodigoCliente.Text <> EmptyStr then
+  begin
+    try
+      ctrCliente := TControleCliente.Create;
+      objCliente := TCliente.Create;
+      objCliente.id_Cliente := StrToInt(edtCodigoCliente.Text);
+      ctrCliente.ConsultarCliente(objCliente);
+      if objCliente.id_Cliente = 0 then
+      begin
+        edtCodigoCliente.Clear;
+        Exit;
+      end;
+      edtNomeCliente.Text := objCliente.Nome;
+    finally
+      FreeAndNil(ctrCliente);
+      FreeAndNil(objCliente);
+    end;
+  end
+  else
+    edtNomeCliente.Clear;
+
+  HabilitarBotoes(edtCodigoCliente.Text <> EmptyStr);
+end;
+
+procedure TfrmPedido.edtCodigoClienteKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not CharInSet(Key, ['0'..'9']) then
+    Key := #0;
+end;
+
+procedure TfrmPedido.edtCodigoProdutoExit(Sender: TObject);
+var ctrProduto: TControleProduto;
+   objProduto: TProduto;
+begin
+  if edtCodigoProduto.Text <> EmptyStr then
+  begin
+    try
+      ctrProduto := TControleProduto.Create;
+      objProduto := TProduto.Create;
+      objProduto.id_Produto := StrToInt(edtCodigoProduto.Text);
+      objProduto := ctrProduto.ConsultarProduto(objProduto);
+      if objProduto.id_Produto = 0 then
+      begin
+        LimparProduto;
+        edtCodigoProduto.SetFocus;
+      end;
+      edtDescricaoProduto.Text := objProduto.Descricao;
+      edtValorUnitario.Text := FormatFloat('#,##0.00', objProduto.PrecoVenda);
+    finally
+      FreeAndNil(ctrProduto);
+      FreeAndNil(objProduto);
+    end;
+  end
+  else
+    LimparProduto;
+end;
+
+procedure TfrmPedido.edtCodigoProdutoKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not CharInSet(Key, ['0'..'9']) then
+    Key := #0;
+end;
+
+procedure TfrmPedido.edtQuantidadeExit(Sender: TObject);
+begin
+  if edtQuantidade.Text <> EmptyStr then
+    CalcularTotalProduto;
+end;
+
+procedure TfrmPedido.edtQuantidadeKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not CharInSet(Key, ['0'..'9', ',', '.']) then
+    Key := #0;
+end;
+
+procedure TfrmPedido.edtValorUnitarioExit(Sender: TObject);
+begin
+  if edtValorUnitario.Text <> EmptyStr then
+    CalcularTotalProduto;
+end;
+
+procedure TfrmPedido.edtValorUnitarioKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if not CharInSet(Key, ['0'..'9', ',', '.']) then
+    Key := #0;
+end;
+
+procedure TfrmPedido.FormShow(Sender: TObject);
+begin
+  LimparTudo;
+end;
+
+procedure TfrmPedido.GravarPedido;
+var ctrPedido: TControlePedido;
+    objPedido: TPedido;
+    ctrPedidoProduto: TControlePedidoProduto;
+    objPedidoProduto: TPedidoProduto;
+begin
+  try
+    try
+      ctrPedido := TControlePedido.Create;
+      objPedido := TPedido.Create;
+      objPedidoProduto := TPedidoProduto.Create;
+      ctrPedidoProduto := TControlePedidoProduto.Create;
+      objPedido.id_Pedido := StrToIntDef(edtNumeroPedido.Text, 0);
+      objPedido.id_Cliente := StrToInt(edtCodigoCliente.Text);
+      objPedido := ctrPedido.SalvarPedido(objPedido);
+      cdsPedidoProduto.First;
+      while not cdsPedidoProduto.Eof do
+      begin
+        objPedidoProduto.Produto.id_Produto := cdsPedidoProdutoid_Produto.AsInteger;
+        objPedidoProduto.Quantidade := cdsPedidoProdutoQuantidade.AsFloat;
+        objPedidoProduto.ValorUnitario := cdsPedidoProdutoValorUnitario.AsFloat;
+        objPedidoProduto.ValorTotal := cdsPedidoProdutoValorTotal.AsFloat;
+        objPedidoProduto.id_PedidoProduto := cdsPedidoProdutoid_PedidoProduto.AsInteger;
+        objPedidoProduto.id_Pedido := objPedido.id_Pedido;
+        ctrPedidoProduto.SalvarPedidoProduto(objPedidoProduto);
+        cdsPedidoProduto.Next;
+      end;
+    finally
+      FreeAndNil(ctrPedido);
+      FreeAndNil(objPedido);
+      FreeAndNil(ctrPedidoProduto);
+      FreeAndNil(objPedidoProduto);
+    end;
+  except on E: Exception do
+    raise Exception.Create(e.Message);
+  end;
+end;
+
+procedure TfrmPedido.HabilitarBotoes(vHabilitar: Boolean);
+begin
+  btnCarregarPedido.Enabled := vHabilitar;
+  btnCancelarPedido.Enabled := vHabilitar;
+end;
+
+procedure TfrmPedido.SalvarProduto(vid_Produto, vid_PedidoProduto: Integer; vDescricao: string; vQuantidade, vValorUnitario, vValorTotal: Double);
+begin
+  if cdsPedidoProduto.Locate('id_PedidoProduto', VarArrayOf([vid_PedidoProduto]), [loCaseInsensitive]) then
+    cdsPedidoProduto.Edit
+  else
+    cdsPedidoProduto.Append;
+  cdsPedidoProdutoid_Produto.AsInteger := vid_Produto;
+  cdsPedidoProdutoDescricao.Text := vDescricao;
+  cdsPedidoProdutoQuantidade.AsFloat := vQuantidade;
+  cdsPedidoProdutoValorUnitario.AsFloat := vValorUnitario;
+  cdsPedidoProdutoValorTotal.AsFloat := vValorTotal;
+  cdsPedidoProdutoid_PedidoProduto.AsInteger := vid_PedidoProduto;
+  cdsPedidoProduto.Post;
+end;
+
+procedure TfrmPedido.LimparProduto;
+begin
+  edtCodigoProduto.Clear;
+  edtDescricaoProduto.Clear;
+  edtQuantidade.Clear;
+  edtValorUnitario.Clear;
+  edtValorTotal.Clear;
+  edtPedidoProduto.Clear;
+  edtCodigoProduto.ReadOnly := False;
+end;
+
+procedure TfrmPedido.LimparTudo;
+begin
+  edtNumeroPedido.Clear;
+  edtCodigoCliente.Clear;
+  edtNomeCliente.Clear;
+  edtTotalPedido.Clear;
+  edtDataEmissao.Clear;
+
+  cdsPedidoProduto.EmptyDataSet;
+
+  LimparProduto;
+end;
+
+procedure TfrmPedido.TotalizarPedido;
+var posicao: TBookmark;
+  Total: Double;
+begin
+  posicao := cdsPedidoProduto.GetBookmark;
+  cdsPedidoProduto.First;
+  Total := 0;
+  while not cdsPedidoProduto.Eof do
+  begin
+    Total := Total + cdsPedidoProdutoValorTotal.AsFloat;
+    cdsPedidoProduto.Next;
+  end;
+  edtTotalPedido.Text := FormatFloat('#,##0.00', Total);
+  cdsPedidoProduto.GotoBookmark(posicao);
+  cdsPedidoProduto.FreeBookmark(posicao);
+end;
+
+end.

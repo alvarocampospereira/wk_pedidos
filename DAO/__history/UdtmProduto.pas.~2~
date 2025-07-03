@@ -1,0 +1,40 @@
+unit UdtmProduto;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, UdtmBaseDAO, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TdtmProduto = class(TdtmBaseDAO)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function ConsultarDescricao(id: Integer): string; override;
+  end;
+
+var
+  dtmProduto: TdtmProduto;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TdtmProduto }
+
+function TdtmProduto.ConsultarDescricao(id: Integer): string;
+begin
+  qryBase.Close;
+  qryBase.SQL.Clear;
+  qryBase.SQL.Add('SELECT DESCRICAO FROM PRODUTO WHERE ID_PRODUTO = ' + IntToStr(id));
+  qryBase.Open;
+  Result := qryBase.FieldByName('DESCRICAO').AsString;
+end;
+
+end.

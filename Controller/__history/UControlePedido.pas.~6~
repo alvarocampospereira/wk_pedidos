@@ -1,0 +1,61 @@
+unit UControlePedido;
+
+interface
+
+uses UControleBase, UdtmPedido, System.SysUtils, Vcl.Forms, Windows,
+  UPedido;
+
+type
+  TControlePedido = class(TControleBase)
+  private
+  public
+    constructor Create;
+    destructor Destroy;
+
+    function ConsultarPedido(objPedido: TPedido): TPedido;
+    function SalvarPedido(objPedido: TPedido): TPedido;
+    function ExcluirPedido(id: Integer): Boolean;
+  end;
+
+implementation
+
+{ TControlePedido }
+
+function TControlePedido.ConsultarPedido(objPedido: TPedido): TPedido;
+begin
+  Result := (FObjetoDAO as TdtmPedido).ConsultarPedido(objPedido);
+  if Result.id_Pedido = 0 then
+    Application.MessageBox('Pedido não encontrado!', 'Aviso', MB_OK +
+      MB_ICONWARNING);
+end;
+
+constructor TControlePedido.Create;
+begin
+  FObjetoDAO := TdtmPedido.Create(nil);
+  inherited;
+end;
+
+destructor TControlePedido.Destroy;
+begin
+  inherited;
+end;
+
+function TControlePedido.ExcluirPedido(id: Integer): Boolean;
+begin
+  if Application.MessageBox('Deseja realmente excluir o pedido?', 'Excluir',
+    MB_YESNO + MB_ICONQUESTION) = IDYES then
+  begin
+    Result := (FObjetoDAO as TdtmPedido).ExcluirPedido(id);
+  end;
+end;
+
+function TControlePedido.SalvarPedido(objPedido: TPedido): TPedido;
+begin
+  try
+    Result := (FObjetoDAO as TdtmPedido).SalvarPedido(objPedido);
+  except on E: Exception do
+    raise Exception.Create(e.Message);
+  end;
+end;
+
+end.

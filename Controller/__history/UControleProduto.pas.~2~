@@ -1,0 +1,37 @@
+unit UControleProduto;
+
+interface
+
+uses UControleBase, UdtmProduto;
+
+type
+  TControleProduto = class(TControleBase)
+  private
+  public
+    constructor Create;
+    destructor Destroy;
+
+    function ConsultarDescricao(id: Integer): String;
+  end;
+
+implementation
+
+{ TControleProduto }
+
+function TControleProduto.ConsultarDescricao(id: Integer): String;
+begin
+  Result := FObjetoDAO.ConsultarDescricao(id);
+end;
+
+constructor TControleProduto.Create;
+begin
+  FObjetoDAO := TdtmProduto.Create(nil);
+  inherited;
+end;
+
+destructor TControleProduto.Destroy;
+begin
+  inherited;
+end;
+
+end.

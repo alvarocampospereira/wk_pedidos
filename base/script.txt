@@ -1,0 +1,84 @@
+CREATE DATABASE wkpedidos CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE cliente (
+  id_cliente int auto_increment not null,
+  nome varchar(60),
+  cidade varchar(60),
+  uf char(2),
+  constraint primary key pk_cliente (id_cliente));
+  
+INSERT INTO cliente (nome, cidade, uf) values ('PAULO COELHO', 'RIO DE JANEIRO', 'RJ');
+INSERT INTO cliente (nome, cidade, uf) values ('CARLOS DRUMMOND DE ANDRADE', 'ITABIRA', 'MG');
+INSERT INTO cliente (nome, cidade, uf) values ('JORGE AMADO', 'ITABUNA', 'BA');
+INSERT INTO cliente (nome, cidade, uf) values ('GRACILIANO RAMOS', 'QUEBRÂNGULO', 'AL');
+INSERT INTO cliente (nome, cidade, uf) values ('GUIMARÂES ROSA', 'CORDISBURGO', 'MG');
+INSERT INTO cliente (nome, cidade, uf) values ('CELÍLIA MEIRELES', 'RIO DE JANEIRO', 'RJ');
+INSERT INTO cliente (nome, cidade, uf) values ('JOSÉ DE ALENCAR', 'FORTALEZA', 'CE');
+INSERT INTO cliente (nome, cidade, uf) values ('MANUEL BANDEIRA', 'RECIFE', 'PE');
+INSERT INTO cliente (nome, cidade, uf) values ('MONTEIRO LOBATO', 'TAUBATÉ', 'SP');
+INSERT INTO cliente (nome, cidade, uf) values ('VINÍCIUS DE MORAES', 'RIO DE JANEIRO', 'RJ');
+INSERT INTO cliente (nome, cidade, uf) values ('JOÃO CABRAL DE MEO NETO', 'RECIFE', 'PE');
+INSERT INTO cliente (nome, cidade, uf) values ('ÉRICO VERÍSSIMO', 'CRUZ ALTA', 'RS');
+INSERT INTO cliente (nome, cidade, uf) values ('ARIANO SUASSUNA', 'JOÃO PESSOA', 'PB');
+INSERT INTO cliente (nome, cidade, uf) values ('ADÉLIA PRADO', 'DIVINÓPOLIS', 'MG');
+INSERT INTO cliente (nome, cidade, uf) values ('CONCEIÇÃO EVARISTO', 'BELO HORIZONTE', 'MG');
+INSERT INTO cliente (nome, cidade, uf) values ('CASTRO ALVES', 'CURRAL', 'BA');
+INSERT INTO cliente (nome, cidade, uf) values ('LIMA BARRETO', 'RIO DE JANEIRO', 'RJ');
+INSERT INTO cliente (nome, cidade, uf) values ('PAULO LEMINSKI', 'CURITIBA', 'PR');
+INSERT INTO cliente (nome, cidade, uf) values ('MARIO DE ANDRADE', 'SÃO PAULO', 'SP');
+INSERT INTO cliente (nome, cidade, uf) values ('MACHADO DE ASSIM', 'RIO DE JANEIRO', 'RJ');
+INSERT INTO cliente (nome, cidade, uf) values ('LYGIA FAGUNDES TELLES', 'SÃO PAULO', 'SP');
+  
+
+CREATE table produto (
+  id_produto int auto_increment not null,
+  descricao varchar(60),
+  precovenda decimal(15,2),
+  constraint primary key pk_produto(id_produto));
+  
+
+INSERT INTO produto (descricao, precovenda) VALUES 
+('Arroz Tipo 1 5kg', 23.90),
+('Feijão Carioca 1kg', 7.49),
+('Macarrão Espaguete 500g', 3.75),
+('Óleo de Soja 900ml', 6.80),
+('Açúcar Cristal 1kg', 4.25),
+('Café Torrado e Moído 500g', 16.90),
+('Leite Integral 1L', 4.99),
+('Margarina 500g', 5.79),
+('Farinha de Trigo 1kg', 4.60),
+('Sabão em Pó 1kg', 9.90),
+('Detergente Líquido 500ml', 2.99),
+('Papel Higiênico c/ 4 rolos', 6.50),
+('Shampoo 350ml', 12.75),
+('Condicionador 350ml', 13.20),
+('Desinfetante 500ml', 4.10),
+('Refrigerante 2L', 7.25),
+('Biscoito Recheado 140g', 2.60),
+('Iogurte 170g', 2.99),
+('Presunto Fatiado 200g', 6.90),
+('Queijo Mussarela 200g', 9.50);
+
+
+CREATE TABLE pedido(
+  id_pedido int not null,
+  dataemissao date,
+  id_cliente int not null,
+  valortotal decimal(15,2),
+  constraint primary key pk_pedido(id_pedido));
+  
+  
+CREATE TABLE pedidoproduto (
+  id_pedidoproduto int auto_increment not null,
+  id_pedido int not null,
+  id_produto int not null,
+  quantidade decimal(15,3),
+  valorunitario decimal(15,2),
+  valortotal decimal(15,2),
+  constraint primary key pk_pedidoproduto(id_pedidoproduto));
+
+ALTER TABLE pedido add foreign key fk_pedidocliente (id_cliente) references cliente(id_cliente);
+
+ALTER TABLE pedidoproduto 
+add foreign key fk_pedidoprodutopedido (id_pedido) references pedido(id_pedido),
+add foreign key fk_pedidoprodutoproduto (id_produto) references produto(id_produto);

@@ -1,0 +1,95 @@
+unit UdtmPedido;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, UdtmBaseDAO, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, UPedido;
+
+type
+  TdtmPedido = class(TdtmBaseDAO)
+  private
+    { Private declarations }
+    function ObterProximoCodigo: Integer;
+  public
+    { Public declarations }
+    function ConsultarPedido(objPedido: TPedido): TPedido;
+    function SalvarPedido(objPedido: TPedido): TPedido;
+    function ExcluirPedido(id: Integer): Boolean;
+  end;
+
+var
+  dtmPedido: TdtmPedido;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TdtmPedido }
+
+function TdtmPedido.ConsultarPedido(objPedido: TPedido): TPedido;
+begin
+  qryBase.Close;
+  qryBase.SQL.Clear;
+  qryBase.SQL.Add('SELECT ID_PEDIDO, ID_CLIENTE, DATAEMISSAO, VALORTOTAL FROM PEDIDO WHERE ID_PEDIDO = ' + IntToStr(objPedido.id_Pedido));
+  qryBase.Open;
+  Result := objPedido;
+  Result.id_Pedido := qryBase.FieldByName('ID_PEDIDO').AsInteger;
+  Result.id_Cliente := qryBase.FieldByName('ID_CLIENTE').AsInteger;
+  Result.DataEmissao := qryBase.FieldByName('DATAEMISSAO').AsDateTime;
+  Result.ValorTotal := qryBase.FieldByName('VALORTOTAL').AsFloat;
+  qryBase.Close;
+end;
+
+function TdtmPedido.SalvarPedido(objPedido: TPedido): TPedido;
+begin
+  try
+    if objPedido.id_Pedido = 0 then
+      objPedido.id_Pedido := ObterProximoCodigo;
+    qryBase.Close;
+    qryBase.SQL.Clear;
+    qryBase.SQL.Add('INSERT PEDIDO (ID_PEDIDO, ID_CLIENTE, DATAEMISSAO, VALORTOTAL) VALUES (:ID_PEDIDO, :ID_CLIENTE, :DATAEMISSAO, :VALORTOTAL)');
+    qryBase.SQL.Add('ON DUPLICATE KEY UPDATE ID_CLIENTE = :ID_CLIENTE, DATAEMISSAO = :DATAEMISSAO, VALORTOTAL = :VALORTOTAL');
+    qryBase.ParamByName('ID_PEDIDO').AsInteger := objPedido.id_Pedido;
+    qryBase.ParamByName('ID_CLIENTE').AsInteger := objPedido.id_Cliente;
+    qryBase.ParamByName('DATAEMISSAO').AsDate := Date;
+    qryBase.ParamByName('VALORTOTAL').AsFloat := objPedido.ValorTotal;
+    qryBase.ExecSQL;
+    Result := objPedido;
+  except on E: Exception do
+    begin
+      raise Exception.Create('Erro ao gravar pedido. Mensagem: ' + e.Message);
+    end;
+  end;
+end;
+
+function TdtmPedido.ExcluirPedido(id: Integer): Boolean;
+begin
+  try
+    qryBase.Close;
+    qryBase.SQL.Clear;
+    qryBase.SQL.Add('DELETE FROM FROM PEDIDO WHERE ID_PEDIDO = ' + IntToStr(id));
+    qryBase.ExecSQL;
+    Result := True;
+  except on E: Exception do
+  begin
+    Result := False;
+    raise Exception.Create('Erro ao excluir pedido. Mensagem:' + e.Message);
+  end;
+  end;
+end;
+
+function TdtmPedido.ObterProximoCodigo: Integer;
+begin
+  qryBase.Close;
+  qryBase.SQL.Clear;
+  qryBase.SQL.Add('SELECT MAX(ID_PEDIDO) AS ID_PEDIDO FROM PEDIDO');
+  qryBase.Open;
+  Result := qryBase.FieldByName('ID_PEDIDO').AsInteger + 1;
+end;
+
+end.

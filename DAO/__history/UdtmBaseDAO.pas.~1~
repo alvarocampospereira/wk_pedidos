@@ -1,0 +1,25 @@
+unit UdtmBaseDAO;
+
+interface
+
+uses
+  System.SysUtils, System.Classes;
+
+type
+  TdtmBaseDAO = class(TDataModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dtmBaseDAO: TdtmBaseDAO;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

@@ -1,0 +1,38 @@
+unit UControleCliente;
+
+interface
+
+uses UControleBase, UdtmProduto, System.SysUtils, Vcl.Forms, Windows,
+  UCliente;
+
+type
+  TControleCliente = class(TControleBase)
+  private
+  public
+    constructor Create;
+    destructor Destroy;
+
+    function ConsultarCliente(objCliente: TCliente): TCliente;
+  end;
+
+
+implementation
+
+{ TControleCliente }
+
+function TControleCliente.ConsultarCliente(objCliente: TCliente): TCliente;
+begin
+
+end;
+
+constructor TControleCliente.Create;
+begin
+
+end;
+
+destructor TControleCliente.Destroy;
+begin
+
+end;
+
+end.

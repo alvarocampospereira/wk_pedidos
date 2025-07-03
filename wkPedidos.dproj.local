@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2025/07/01 15:30:02.000.178,=C:\Users\anarq\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2025/07/01 15:30:45.000.016,C:\Users\anarq\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\Delphi\wk_pedidos\UfrmPrincipal.pas</Transaction>
+    <Transaction>2025/07/01 15:30:45.000.016,C:\Users\anarq\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\Delphi\wk_pedidos\UfrmPrincipal.dfm</Transaction>
+    <Transaction>2025/07/01 15:31:01.000.622,C:\Users\anarq\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\Delphi\wk_pedidos\wkPedidos.dproj</Transaction>
+    <Transaction>2025/07/01 15:34:58.000.299,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/01 15:35:57.000.277,D:\Delphi\wk_pedidos\Unit1.dfm=D:\Delphi\wk_pedidos\DAO\UdtmConexao.dfm</Transaction>
+    <Transaction>2025/07/01 15:35:57.000.277,D:\Delphi\wk_pedidos\Unit1.pas=D:\Delphi\wk_pedidos\DAO\UdtmConexao.pas</Transaction>
+    <Transaction>2025/07/01 15:36:08.000.920,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/01 16:00:23.000.822,D:\Delphi\wk_pedidos\Unit1.dfm=D:\Delphi\wk_pedidos\DAO\UdtmBaseDAO.dfm</Transaction>
+    <Transaction>2025/07/01 16:00:23.000.821,D:\Delphi\wk_pedidos\Unit1.pas=D:\Delphi\wk_pedidos\DAO\UdtmBaseDAO.pas</Transaction>
+    <Transaction>2025/07/02 09:32:02.484,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 09:32:20.961,D:\Delphi\wk_pedidos\DAO\UdtmProduto.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 09:32:20.961,D:\Delphi\wk_pedidos\DAO\UdtmProduto.dfm=D:\Delphi\wk_pedidos\Unit1.dfm</Transaction>
+    <Transaction>2025/07/02 09:39:59.800,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 09:44:23.955,D:\Delphi\wk_pedidos\Controller\UControleBase.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 09:52:42.133,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 09:53:01.125,D:\Delphi\wk_pedidos\Controller\UControleProduto.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 09:53:15.287,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 09:53:32.690,D:\Delphi\wk_pedidos\Controller\UControleCliente.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 10:47:53.792,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 10:48:10.491,D:\Delphi\wk_pedidos\Model\UProduto.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 14:30:07.491,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 14:30:24.881,D:\Delphi\wk_pedidos\Model\UCliente.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 14:31:59.759,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 14:32:41.840,D:\Delphi\wk_pedidos\Controller\UControlePedido.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 14:33:51.679,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 14:34:18.822,D:\Delphi\wk_pedidos\DAO\UdtmCliente.dfm=D:\Delphi\wk_pedidos\Unit1.dfm</Transaction>
+    <Transaction>2025/07/02 14:34:18.822,D:\Delphi\wk_pedidos\DAO\UdtmCliente.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 15:19:18.968,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 15:19:41.269,D:\Delphi\wk_pedidos\DAO\UdtmPedido.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 15:19:41.269,D:\Delphi\wk_pedidos\DAO\UdtmPedido.dfm=D:\Delphi\wk_pedidos\Unit1.dfm</Transaction>
+    <Transaction>2025/07/02 15:19:49.106,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 15:20:05.795,D:\Delphi\wk_pedidos\DAO\UdtmPedidoProduto.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 15:20:05.795,D:\Delphi\wk_pedidos\DAO\UdtmPedidoProduto.dfm=D:\Delphi\wk_pedidos\Unit1.dfm</Transaction>
+    <Transaction>2025/07/02 15:20:37.370,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 15:20:51.565,D:\Delphi\wk_pedidos\Model\UPedido.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 15:20:56.128,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 15:21:09.455,D:\Delphi\wk_pedidos\Model\UPedidoProduto.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 18:02:14.081,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/02 18:02:33.642,D:\Delphi\wk_pedidos\Controller\UControlePedidoProduto.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/03 07:10:59.040,D:\Delphi\wk_pedidos\View\UfrmPedido.pas=D:\Delphi\wk_pedidos\UfrmPrincipal.pas</Transaction>
+    <Transaction>2025/07/03 07:10:59.041,D:\Delphi\wk_pedidos\View\UfrmPedido.dfm=D:\Delphi\wk_pedidos\UfrmPrincipal.dfm</Transaction>
+    <Transaction>2025/07/03 07:17:48.629,=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/03 07:19:30.689,D:\Delphi\wk_pedidos\View\UfrmInformarPedido.pas=D:\Delphi\wk_pedidos\Unit1.pas</Transaction>
+    <Transaction>2025/07/03 07:19:30.689,D:\Delphi\wk_pedidos\View\UfrmInformarPedido.dfm=D:\Delphi\wk_pedidos\Unit1.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

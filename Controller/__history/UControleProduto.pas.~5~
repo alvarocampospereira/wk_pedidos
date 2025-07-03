@@ -1,0 +1,41 @@
+unit UControleProduto;
+
+interface
+
+uses UControleBase, UdtmProduto, System.SysUtils, Vcl.Forms, Windows,
+  UProduto;
+
+type
+  TControleProduto = class(TControleBase)
+  private
+  public
+    constructor Create;
+    destructor Destroy;
+
+    function ConsultarProduto(id: Integer): TProduto;
+  end;
+
+implementation
+
+{ TControleProduto }
+
+function TControleProduto.ConsultarProduto(id: Integer): TProduto;
+begin
+  Result := FObjetoDAO.ConsultarDescricao(id);
+  if Result.id_Produto = 0 then
+    Application.MessageBox('Produto não encontrado', 'Aviso', MB_OK +
+      MB_ICONWARNING);
+end;
+
+constructor TControleProduto.Create;
+begin
+  FObjetoDAO := TdtmProduto.Create(nil);
+  inherited;
+end;
+
+destructor TControleProduto.Destroy;
+begin
+  inherited;
+end;
+
+end.

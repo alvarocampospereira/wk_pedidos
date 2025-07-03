@@ -1,0 +1,50 @@
+unit UControlePedidoProduto;
+
+interface
+
+uses UControleBase, UdtmPedidoProduto, System.SysUtils, Vcl.Forms, Windows,
+  UPedidoProduto, System.Generics.Collections;
+
+type
+  TControlePedidoProduto = class(TControleBase)
+  private
+  public
+    constructor Create;
+    destructor Destroy;
+
+    function ConsultarPedidoProduto(objProduto: TPedidoProduto): TObjectList<TPedidoProduto>;
+    function SalvarPedidoProduto(objPedidoProduto: TPedidoProduto): TPedidoProduto;
+  end;
+
+implementation
+
+{ TControlePedidoProduto }
+
+function TControlePedidoProduto.ConsultarPedidoProduto(
+  objProduto: TPedidoProduto): TObjectList<TPedidoProduto>;
+begin
+
+end;
+
+constructor TControlePedidoProduto.Create;
+begin
+  FObjetoDAO := TdtmPedidoProduto.Create(nil);
+  inherited;
+end;
+
+destructor TControlePedidoProduto.Destroy;
+begin
+  inherited;
+end;
+
+function TControlePedidoProduto.SalvarPedidoProduto(
+  objPedidoProduto: TPedidoProduto): TPedidoProduto;
+begin
+  try
+    Result := (FObjetoDAO as TdtmPedidoProduto).SalvarPedidoProduto(objPedidoProduto);
+  except on E: Exception do
+    raise Exception.Create(e.Message);
+  end;
+end;
+
+end.

@@ -1,0 +1,18 @@
+object dtmConexao: TdtmConexao
+  OldCreateOrder = False
+  Height = 150
+  Width = 215
+  object conConexao: TFDConnection
+    Params.Strings = (
+      'DriverID=MySQL')
+    Transaction = fdtTransacao
+    BeforeConnect = conConexaoBeforeConnect
+    Left = 32
+    Top = 24
+  end
+  object fdtTransacao: TFDTransaction
+    Connection = conConexao
+    Left = 104
+    Top = 88
+  end
+end

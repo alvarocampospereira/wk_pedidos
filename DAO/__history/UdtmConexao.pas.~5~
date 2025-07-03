@@ -1,0 +1,56 @@
+unit UdtmConexao;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, FireDAC.Comp.Client, Data.DB,
+  System.IniFiles;
+
+type
+  TdtmConexao = class(TDataModule)
+    conConexao: TFDConnection;
+    fdtTransacao: TFDTransaction;
+    procedure conConexaoBeforeConnect(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Conectar;
+  end;
+
+var
+  dtmConexao: TdtmConexao;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+procedure TdtmConexao.conConexaoBeforeConnect(Sender: TObject);
+var ini: Tinifile;
+begin
+  ini := Tinifile.Create(ExtractFileDir(ParamStr(0)) + '\wk.ini');
+  conConexao.DriverName := ini.ReadString('conexao','drive', 'MySQL');
+  conConexao.Params.Clear;
+  conConexao.Params.Add('Server=' + ini.ReadString('conexao','server', EmptyStr));
+  conConexao.Params.Add('Port=' + ini.ReadString('conexao','port', EmptyStr));
+  conConexao.Params.Add('User_Name=' + ini.ReadString('conexao','user', EmptyStr));
+  conConexao.Params.Add('Password=' + ini.ReadString('conexao','password', EmptyStr));
+  conConexao.Params.Add('Database=' + ini.ReadString('conexao','database', EmptyStr));
+  FreeAndNil(ini);
+end;
+
+procedure TdtmConexao.Conectar;
+begin
+  try
+    conConexao.Connected := True;
+  except on E: Exception do
+    raise Exception.Create('Erro ao conectar. Mensagem:' + e.Message);
+  end;
+end;
+
+end.

@@ -1,0 +1,31 @@
+program wkPedidos;
+
+uses
+  Vcl.Forms,
+  UfrmPedido in 'View\UfrmPedido.pas' {frmPedido},
+  UdtmConexao in 'DAO\UdtmConexao.pas' {dtmConexao: TDataModule},
+  UdtmBaseDAO in 'DAO\UdtmBaseDAO.pas' {dtmBaseDAO: TDataModule},
+  UdtmProduto in 'DAO\UdtmProduto.pas' {dtmProduto: TDataModule},
+  UControleBase in 'Controller\UControleBase.pas',
+  UControleProduto in 'Controller\UControleProduto.pas',
+  UControleCliente in 'Controller\UControleCliente.pas',
+  UProduto in 'Model\UProduto.pas',
+  UCliente in 'Model\UCliente.pas',
+  UControlePedido in 'Controller\UControlePedido.pas',
+  UdtmCliente in 'DAO\UdtmCliente.pas' {dtmCliente: TDataModule},
+  UdtmPedido in 'DAO\UdtmPedido.pas' {dtmPedido: TDataModule},
+  UdtmPedidoProduto in 'DAO\UdtmPedidoProduto.pas' {dtmPedidoProduto: TDataModule},
+  UPedido in 'Model\UPedido.pas',
+  UPedidoProduto in 'Model\UPedidoProduto.pas',
+  UControlePedidoProduto in 'Controller\UControlePedidoProduto.pas',
+  UfrmInformarPedido in 'View\UfrmInformarPedido.pas' {frmInformarPedido};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmPedido, frmPedido);
+  Application.CreateForm(TdtmConexao, dtmConexao);
+  Application.Run;
+end.

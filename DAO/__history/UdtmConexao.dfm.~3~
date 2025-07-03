@@ -1,0 +1,27 @@
+object dtmConexao: TdtmConexao
+  OldCreateOrder = False
+  Height = 150
+  Width = 215
+  object conConexao: TFDConnection
+    Params.Strings = (
+      'Database=wkpedidos'
+      'User_Name=root'
+      'Password=teste123'
+      'Server=localhost'
+      'DriverID=MySQL')
+    Transaction = fdtTransacao
+    BeforeConnect = conConexaoBeforeConnect
+    Left = 32
+    Top = 24
+  end
+  object fdtTransacao: TFDTransaction
+    Connection = conConexao
+    Left = 104
+    Top = 88
+  end
+  object fdMySqlDriver: TFDPhysMySQLDriverLink
+    VendorLib = 'D:\Delphi\wk_pedidos\libmysql.dll'
+    Left = 112
+    Top = 40
+  end
+end

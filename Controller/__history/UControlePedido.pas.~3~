@@ -1,0 +1,20 @@
+unit UControlePedido;
+
+interface
+
+uses UControleBase, UdtmPedido, System.SysUtils, Vcl.Forms, Windows,
+  UPedido;
+
+type
+  TControleProduto = class(TControleBase)
+  private
+  public
+    constructor Create;
+    destructor Destroy;
+
+    function ConsultarProduto(objProduto: TProduto): TProduto;
+  end;
+
+implementation
+
+end.

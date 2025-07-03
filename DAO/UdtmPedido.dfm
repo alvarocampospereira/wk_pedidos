@@ -1,0 +1,2 @@
+inherited dtmPedido: TdtmPedido
+end

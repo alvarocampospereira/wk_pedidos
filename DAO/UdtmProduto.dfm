@@ -1,0 +1,2 @@
+inherited dtmProduto: TdtmProduto
+end

@@ -1,0 +1,42 @@
+unit UdtmConexao;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.MySQL,
+  FireDAC.Phys.MySQLDef, FireDAC.VCLUI.Wait, FireDAC.Comp.Client, Data.DB;
+
+type
+  TdtmConexao = class(TDataModule)
+    conConexao: TFDConnection;
+    fdtTransacao: TFDTransaction;
+    procedure conConexaoBeforeConnect(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dtmConexao: TdtmConexao;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+procedure TdtmConexao.conConexaoBeforeConnect(Sender: TObject);
+begin
+  conConexao.DriverName := 'MySQL';
+  conConexao.Params.Clear;
+  conConexao.Params.Add('Server=localhost');
+  conConexao.Params.Add('Port=3306');
+  conConexao.Params.Add('User_Name=seu_usuario');
+  conConexao.Params.Add('Password=sua_senha');
+  conConexao.Params.Add('Database=seu_banco');
+end;
+
+end.

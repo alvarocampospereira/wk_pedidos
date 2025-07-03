@@ -1,0 +1,402 @@
+object frmPedido: TfrmPedido
+  Left = 0
+  Top = 0
+  ActiveControl = dbgrdProdutos
+  Caption = 'Pedido'
+  ClientHeight = 550
+  ClientWidth = 871
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object dbgrdProdutos: TDBGrid
+    Left = 0
+    Top = 145
+    Width = 871
+    Height = 364
+    Align = alClient
+    DataSource = dtsPedidoProduto
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = [fsBold]
+    OnKeyDown = dbgrdProdutosKeyDown
+  end
+  object pnlCliente: TPanel
+    Left = 0
+    Top = 0
+    Width = 871
+    Height = 81
+    Align = alTop
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+    ExplicitLeft = 40
+    ExplicitTop = 45
+    ExplicitWidth = 766
+    object lblCodigoCliente: TLabel
+      Left = 17
+      Top = 41
+      Width = 80
+      Height = 13
+      Caption = 'C'#243'digo Cliente'
+    end
+    object lblNumeroPedido: TLabel
+      Left = 17
+      Top = 4
+      Width = 85
+      Height = 13
+      Caption = 'N'#250'mero Pedido'
+    end
+    object lblData: TLabel
+      Left = 140
+      Top = 4
+      Width = 76
+      Height = 13
+      Caption = 'Data Emiss'#227'o'
+    end
+    object btnCarregarPedido: TBitBtn
+      Left = 488
+      Top = 8
+      Width = 130
+      Height = 25
+      Caption = 'Carregar Pedido'
+      TabOrder = 0
+      OnClick = btnCarregarPedidoClick
+    end
+    object btnCancelarPedido: TBitBtn
+      Left = 624
+      Top = 8
+      Width = 129
+      Height = 25
+      Caption = 'Cancelar Pedido'
+      TabOrder = 1
+    end
+    object edtNumeroPedido: TEdit
+      Left = 17
+      Top = 18
+      Width = 121
+      Height = 21
+      TabOrder = 2
+      Text = 'edtNumeroPedido'
+      OnKeyPress = edtNumeroPedidoKeyPress
+    end
+    object edtCodigoCliente: TEdit
+      Left = 17
+      Top = 56
+      Width = 121
+      Height = 21
+      TabOrder = 3
+      Text = 'edtCodigoCliente'
+      OnExit = edtCodigoClienteExit
+      OnKeyPress = edtCodigoClienteKeyPress
+    end
+    object edtNomeCliente: TEdit
+      Left = 140
+      Top = 56
+      Width = 300
+      Height = 21
+      TabStop = False
+      Color = clSilver
+      ReadOnly = True
+      TabOrder = 4
+      Text = 'edtNomeCliente'
+    end
+    object edtDataEmissao: TEdit
+      Left = 140
+      Top = 18
+      Width = 121
+      Height = 21
+      TabStop = False
+      Color = clSilver
+      ReadOnly = True
+      TabOrder = 5
+      Text = 'edtDataEmissao'
+    end
+  end
+  object pnlProduto: TPanel
+    Left = 0
+    Top = 81
+    Width = 871
+    Height = 64
+    Align = alTop
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 2
+    object lblCodigoProduto: TLabel
+      Left = 8
+      Top = 11
+      Width = 86
+      Height = 13
+      Caption = 'C'#243'digo Produto'
+    end
+    object lblDescricao: TLabel
+      Left = 87
+      Top = 11
+      Width = 55
+      Height = 13
+      Caption = 'Descri'#231#227'o'
+    end
+    object lblQuantidade: TLabel
+      Left = 336
+      Top = 11
+      Width = 65
+      Height = 13
+      Caption = 'Quantidade'
+    end
+    object lblValorUnitario: TLabel
+      Left = 464
+      Top = 11
+      Width = 77
+      Height = 13
+      Caption = 'Valor Unit'#225'rio'
+    end
+    object lblValorTotal: TLabel
+      Left = 600
+      Top = 11
+      Width = 61
+      Height = 13
+      Caption = 'Valor Total'
+    end
+    object btnInserirProduto: TBitBtn
+      Left = 727
+      Top = 25
+      Width = 130
+      Height = 25
+      Caption = 'Inserir Produto'
+      TabOrder = 5
+      OnClick = btnInserirProdutoClick
+    end
+    object edtCodigoProduto: TEdit
+      Left = 8
+      Top = 27
+      Width = 73
+      Height = 21
+      TabOrder = 0
+      Text = 'edtCodigoProduto'
+      OnExit = edtCodigoProdutoExit
+      OnKeyPress = edtCodigoProdutoKeyPress
+    end
+    object edtDescricaoProduto: TEdit
+      Left = 86
+      Top = 27
+      Width = 245
+      Height = 21
+      TabStop = False
+      Color = clSilver
+      ReadOnly = True
+      TabOrder = 1
+      Text = 'edtDescricaoProduto'
+    end
+    object edtQuantidade: TEdit
+      Left = 336
+      Top = 27
+      Width = 121
+      Height = 21
+      TabOrder = 2
+      Text = 'edtQuantidade'
+      OnExit = edtQuantidadeExit
+      OnKeyPress = edtQuantidadeKeyPress
+    end
+    object edtValorUnitario: TEdit
+      Left = 464
+      Top = 27
+      Width = 121
+      Height = 21
+      TabOrder = 3
+      Text = 'edtValorUnitario'
+      OnExit = edtValorUnitarioExit
+      OnKeyPress = edtValorUnitarioKeyPress
+    end
+    object edtValorTotal: TEdit
+      Left = 600
+      Top = 27
+      Width = 121
+      Height = 21
+      TabStop = False
+      Color = clSilver
+      ReadOnly = True
+      TabOrder = 4
+      Text = 'edtValorTotal'
+    end
+    object edtPedidoProduto: TEdit
+      Left = 725
+      Top = 1
+      Width = 121
+      Height = 21
+      Color = clRed
+      TabOrder = 6
+      Text = '0'
+      Visible = False
+    end
+  end
+  object pnlTotal: TPanel
+    Left = 0
+    Top = 509
+    Width = 871
+    Height = 41
+    Align = alBottom
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+    ExplicitWidth = 766
+    object lblTotalPedido: TLabel
+      Left = 535
+      Top = 11
+      Width = 70
+      Height = 13
+      Caption = 'Total Pedido'
+    end
+    object btnGravarPedido: TBitBtn
+      Left = 48
+      Top = 6
+      Width = 130
+      Height = 25
+      Caption = 'Gravar Pedido'
+      TabOrder = 0
+      OnClick = btnGravarPedidoClick
+    end
+    object btnLimpar: TBitBtn
+      Left = 206
+      Top = 6
+      Width = 130
+      Height = 25
+      Caption = 'Limpar'
+      TabOrder = 1
+      OnClick = btnLimparClick
+    end
+    object edtTotalPedido: TEdit
+      Left = 600
+      Top = 6
+      Width = 121
+      Height = 21
+      TabStop = False
+      Color = clYellow
+      ReadOnly = True
+      TabOrder = 2
+      Text = 'edtTotalPedido'
+    end
+  end
+  object cdsPedidoProduto: TClientDataSet
+    PersistDataPacket.Data = {
+      E80000009619E0BD010000001800000008000000000003000000E8000A69645F
+      50726F6475746F04000100000000000944657363726963616F01004900000001
+      00055749445448020002003C000A5175616E7469646164650800040000000000
+      0D56616C6F72556E69746172696F08000400000000000A56616C6F72546F7461
+      6C0800040000000000084578636C7569646F02000300000000001069645F5065
+      6469646F50726F6475746F040001000000000003536571040001000200010007
+      535542545950450200490008004175746F696E630001000C4155544F494E4356
+      414C55450400010001000000}
+    Active = True
+    Aggregates = <>
+    Filter = 'Excluido = False'
+    FieldDefs = <
+      item
+        Name = 'id_Produto'
+        DataType = ftInteger
+      end
+      item
+        Name = 'Descricao'
+        DataType = ftString
+        Size = 60
+      end
+      item
+        Name = 'Quantidade'
+        DataType = ftFloat
+      end
+      item
+        Name = 'ValorUnitario'
+        DataType = ftFloat
+      end
+      item
+        Name = 'ValorTotal'
+        DataType = ftFloat
+      end
+      item
+        Name = 'Excluido'
+        DataType = ftBoolean
+      end
+      item
+        Name = 'id_PedidoProduto'
+        DataType = ftInteger
+      end
+      item
+        Name = 'Seq'
+        Attributes = [faReadonly]
+        DataType = ftAutoInc
+      end>
+    IndexDefs = <>
+    Params = <>
+    StoreDefs = True
+    AfterInsert = cdsPedidoProdutoAfterInsert
+    Left = 472
+    Top = 224
+    object cdsPedidoProdutoid_Produto: TIntegerField
+      DisplayLabel = 'C'#243'digo Produto'
+      FieldName = 'id_Produto'
+    end
+    object cdsPedidoProdutoDescricao: TStringField
+      DisplayLabel = 'Descri'#231#227'o'
+      FieldName = 'Descricao'
+      Size = 60
+    end
+    object cdsPedidoProdutoQuantidade: TFloatField
+      FieldName = 'Quantidade'
+      DisplayFormat = '#,##0.000'
+    end
+    object cdsPedidoProdutoValorUnitario: TFloatField
+      DisplayLabel = 'Valor Unit'#225'rio'
+      FieldName = 'ValorUnitario'
+      DisplayFormat = '#,##0.00'
+    end
+    object cdsPedidoProdutoValorTotal: TFloatField
+      DisplayLabel = 'Valor Total'
+      FieldName = 'ValorTotal'
+      DisplayFormat = '#,##0.00'
+    end
+    object cdsPedidoProdutoExcluido: TBooleanField
+      FieldName = 'Excluido'
+      Visible = False
+    end
+    object cdsPedidoProdutoid_PedidoProduto: TIntegerField
+      FieldName = 'id_PedidoProduto'
+      Visible = False
+    end
+    object cdsPedidoProdutoSeq: TAutoIncField
+      FieldName = 'Seq'
+      Visible = False
+    end
+  end
+  object dtsPedidoProduto: TDataSource
+    DataSet = cdsPedidoProduto
+    Left = 464
+    Top = 360
+  end
+end

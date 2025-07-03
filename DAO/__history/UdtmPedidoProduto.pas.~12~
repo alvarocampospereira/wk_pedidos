@@ -1,0 +1,98 @@
+unit UdtmPedidoProduto;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, UdtmBaseDAO, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, UPedidoProduto,
+  System.Generics.Collections;
+
+type
+  TdtmPedidoProduto = class(TdtmBaseDAO)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function ConsultarPedidoProduto(objPedidoProduto: TPedidoProduto): TObjectList<TPedidoProduto>;
+    function SalvarPedidoProduto(objPedidoProduto: TPedidoProduto): TPedidoProduto;
+    function ExcluirPedidoProduto(id: Integer): Boolean;
+  end;
+
+var
+  dtmPedidoProduto: TdtmPedidoProduto;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TdtmPedidoProduto }
+
+function TdtmPedidoProduto.ConsultarPedidoProduto(
+  objPedidoProduto: TPedidoProduto): TObjectList<TPedidoProduto>;
+var i: Integer;
+begin
+  qryBase.Close;
+  qryBase.SQL.Clear;
+  qryBase.SQL.Add('SELECT PP.ID_PEDIDOPRODUTO, PP.ID_PEDIDO, PP.ID_PRODUTO, PP.QUANTIDADE, PP.VALORUNITARIO, PP.VALORTOTAL, P.DESCRICAO FROM PEDIDOPRODUTO PP, PRODUTO P WHERE PP.ID_PRODUTO = P.ID_PRODUTO AND PP.ID_PEDIDOPRODUTO = ' + IntToStr(objPedidoProduto.id_PedidoProduto));
+  qryBase.Open;
+  qryBase.First;
+  while not qryBase.Eof do
+  begin
+    Result.Add(TPedidoProduto.Create);
+    i := Result.Count - 1;
+    Result[i].id_PedidoProduto := qryBase.FieldByName('ID_PEDIDOPRODUTO').AsInteger;
+    Result[i].id_Pedido := qryBase.FieldByName('ID_PEDIDO').AsInteger;
+    Result[i].Produto.id_Produto := qryBase.FieldByName('ID_PRODUTO').AsInteger;
+    Result[i].Produto.Descricao := qryBase.FieldByName('DESCRICAO').AsString;
+    Result[i].Quantidade := qryBase.FieldByName('QUANTIDADE').AsFloat;
+    Result[i].ValorUnitario := qryBase.FieldByName('VALORUNITARIO').AsFloat;
+    Result[i].ValorTotal := qryBase.FieldByName('VALORTOTAL').AsFloat;
+    qryBase.Next;
+  end;
+  qryBase.Close;
+end;
+
+function TdtmPedidoProduto.ExcluirPedidoProduto(id: Integer): Boolean;
+begin
+  try
+    qryBase.Close;
+    qryBase.SQL.Clear;
+    qryBase.SQL.Add('DELETE FROM FROM PEDIDOPRODUTO WHERE ID_PEDIDOPRODUTO = ' + IntToStr(id));
+    qryBase.ExecSQL;
+    Result := True;
+  except on E: Exception do
+  begin
+    Result := False;
+    raise Exception.Create('Erro ao excluir pedido produto. Mensagem:' + e.Message);
+  end;
+  end;
+end;
+
+function TdtmPedidoProduto.SalvarPedidoProduto(
+  objPedidoProduto: TPedidoProduto): TPedidoProduto;
+begin
+  try
+    qryBase.Close;
+    qryBase.SQL.Clear;
+    qryBase.SQL.Add('INSERT PEDIDOPRODUTO (ID_PEDIDOPRODUTO, ID_PEDIDO, ID_PRODUTO, QUANTIDADE, VALORUNITARIO, VALORTOTAL) VALUES (:ID_PEDIDOPRODUTO, :ID_PEDIDO, :ID_PRODUTO, :QUANTIDADE, :VALORUNITARIO, :VALORTOTAL)');
+    qryBase.SQL.Add('ON DUPLICATE KEY UPDATE ID_PEDIDO = :ID_PEDIDO, ID_PRODUTO = :ID_PRODUTO, QUANTIDADE = :QUANTIDADE, VALORUNITARIO = :VALORUNITARIO, VALORTOTAL = :VALORTOTAL');
+    qryBase.ParamByName('ID_PEDIDOPRODUTO').AsInteger := objPedidoProduto.id_PedidoProduto;
+    qryBase.ParamByName('ID_PEDIDO').AsInteger := objPedidoProduto.id_Pedido;
+    qryBase.ParamByName('ID_PRODUTO').AsInteger := objPedidoProduto.Produto.id_Produto;
+    qryBase.ParamByName('QUANTIDADE').AsDate := objPedidoProduto.Quantidade;
+    qryBase.ParamByName('VALORUNITARIO').AsFloat := objPedidoProduto.ValorUnitario;
+    qryBase.ParamByName('VALORTOTAL').AsFloat := objPedidoProduto.ValorTotal;
+    qryBase.ExecSQL;
+
+  except on E: Exception do
+    begin
+      raise Exception.Create('Erro ao gravar pedido produto. Mensagem: ' + e.Message);
+    end;
+  end;
+end;
+
+end.
