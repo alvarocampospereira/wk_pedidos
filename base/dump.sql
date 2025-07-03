@@ -65,6 +65,7 @@ CREATE TABLE `pedido` (
 
 LOCK TABLES `pedido` WRITE;
 /*!40000 ALTER TABLE `pedido` DISABLE KEYS */;
+INSERT INTO `pedido` VALUES (1,'2025-07-03',2,0.00),(2,'2025-07-03',1,0.00);
 /*!40000 ALTER TABLE `pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,7 +88,7 @@ CREATE TABLE `pedidoproduto` (
   KEY `fk_pedidoprodutoproduto` (`id_produto`),
   CONSTRAINT `fk_pedidoprodutopedido` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id_pedido`),
   CONSTRAINT `fk_pedidoprodutoproduto` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id_produto`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,6 +97,7 @@ CREATE TABLE `pedidoproduto` (
 
 LOCK TABLES `pedidoproduto` WRITE;
 /*!40000 ALTER TABLE `pedidoproduto` DISABLE KEYS */;
+INSERT INTO `pedidoproduto` VALUES (2,1,2,2.000,7.49,14.98),(3,2,1,1.000,23.90,23.90);
 /*!40000 ALTER TABLE `pedidoproduto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,4 +135,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-03  7:06:03
+-- Dump completed on 2025-07-03  8:28:01
